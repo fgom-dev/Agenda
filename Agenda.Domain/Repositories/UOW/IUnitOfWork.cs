@@ -5,6 +5,7 @@
         IPessoaRepository PessoaRepository { get; }
         IDocumentoTipoRepository DocumentoTipoRepository { get; }
         IPessoaTipoRepository PessoaTipoRepository { get; }
+        IUsuarioRepository UsuarioRepository { get; }
         Task Commit();
     }
 }

@@ -10,6 +10,7 @@ namespace Agenda.Domain.DTOs.Mappings
             CreateMap<Pessoa, PessoaEntradaDto>().ReverseMap();
             CreateMap<DocumentoTipo, DocumentoTipoEntradaDto>().ReverseMap();
             CreateMap<PessoaTipo, PessoaTipoEntradaDto>().ReverseMap();
+            CreateMap<Usuario, UsuarioEntradaDto>().ReverseMap();
         }
 
     }

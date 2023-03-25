@@ -14,12 +14,14 @@ namespace Agenda.Infra.Context
         public DbSet<PessoaTipo> PessoaTipos { get; set; }
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<DocumentoTipo> DocumentoTipos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {            
             modelBuilder.ApplyConfiguration(new PessoaTipoMap());
             modelBuilder.ApplyConfiguration(new PessoaMap());
             modelBuilder.ApplyConfiguration(new DocumentoTipoMap());
+            modelBuilder.ApplyConfiguration(new UsuarioMap());
         }
     }
 }

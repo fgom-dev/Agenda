@@ -9,6 +9,7 @@ namespace Agenda.Infra.Repositories.UOW
         private PessoaRepository _pessoaRepo;
         private DocumentoTipoRepository _documentoTipoRepo;
         private PessoaTipoRepository _pessoaTipoRepo;
+        private UsuarioRepository _usuarioRepo;
         public AgendaContext _context;
         public UnitOfWork(AgendaContext context)
         {
@@ -27,6 +28,11 @@ namespace Agenda.Infra.Repositories.UOW
         public IPessoaTipoRepository PessoaTipoRepository
         {
             get { return _pessoaTipoRepo ??= new PessoaTipoRepository(_context); }
+        }
+        
+        public IUsuarioRepository UsuarioRepository
+        {
+            get { return _usuarioRepo ??= new UsuarioRepository(_context); }
         }
 
         public async Task Commit()
