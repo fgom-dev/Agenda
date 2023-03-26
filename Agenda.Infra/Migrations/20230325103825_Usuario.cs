@@ -44,6 +44,32 @@ namespace Agenda.Infra.Migrations
                 table: "Usuario",
                 column: "PessoaId",
                 unique: true);
+
+            migrationBuilder.InsertData(
+                table: "Usuario",
+                columns: new[]
+                {
+                    "Id",
+                    "Email",
+                    "PasswordHash",
+                    "IsAdmin",
+                    "PessoaId",
+                    "CreatedAt",
+                    "UpdatedAt"
+                },
+                values: new object[,]
+                {
+                    {
+                        "296a0062-2964-458f-8105-0271be3cdd12",
+                        "fnd.gomes02@gmail.com",
+                        "$2a$10$CXkhT338e3Fm/Jv3OPeDWO1.dPJw70.WrrUNIKDnR8pxeRLWWWL0W",
+                        true,
+                        null,
+                        DateTime.UtcNow,
+                        DateTime.UtcNow,
+                    }
+
+                });
         }
 
         /// <inheritdoc />
