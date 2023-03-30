@@ -7,5 +7,6 @@ namespace Agenda.Domain.Repositories
     {
         Task<PagedList<Pessoa>> Get(PaginationParameters parameters);
         Task<Pessoa> GetById(Guid id);
+        Task<Pessoa> GetByDocumento(string documento);
     }
 }

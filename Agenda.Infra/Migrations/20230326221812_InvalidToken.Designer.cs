@@ -3,6 +3,7 @@ using System;
 using Agenda.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Agenda.Infra.Migrations
 {
     [DbContext(typeof(AgendaContext))]
-    partial class AgendaContextModelSnapshot : ModelSnapshot
+    [Migration("20230326221812_InvalidToken")]
+    partial class InvalidToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +52,30 @@ namespace Agenda.Infra.Migrations
                         .IsUnique();
 
                     b.ToTable("DocumentoTipo", (string)null);
+                });
+
+            modelBuilder.Entity("Agenda.Domain.Models.InvalidToken", b =>
+                {
+                    b.Property<Guid?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.ToTable("InvalidToken", (string)null);
                 });
 
             modelBuilder.Entity("Agenda.Domain.Models.Pessoa", b =>
@@ -93,9 +120,6 @@ namespace Agenda.Infra.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Documento")
-                        .IsUnique();
 
                     b.HasIndex("DocumentoTipoId");
 

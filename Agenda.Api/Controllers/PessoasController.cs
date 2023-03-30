@@ -52,6 +52,13 @@ namespace Agenda.Api.Controllers
             return Ok(pessoa);
         }
 
+        [HttpGet("documento/{documento}")]
+        public async Task<ActionResult<Pessoa>> GetByDocumento(string documento)
+        {
+            var pessoa = await _uow.PessoaRepository.GetByDocumento(documento);
+            return Ok(pessoa);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Pessoa>> Post([FromBody] PessoaEntradaDto pessoaEntradaDto)
         {

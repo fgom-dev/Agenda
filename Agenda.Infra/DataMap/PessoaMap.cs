@@ -17,6 +17,7 @@ namespace Agenda.Infra.DataMap
             builder.Property(x => x.Nome).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Sobrenome).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Documento).HasMaxLength(20).IsRequired();
+            builder.HasIndex(x => x.Documento).IsUnique();
 
             builder.HasOne(x => x.PessoaTipo).WithMany().HasForeignKey(x => x.PessoaTipoId);
             builder.HasOne(x => x.DocumentoTipo).WithMany().HasForeignKey(x => x.DocumentoTipoId);
