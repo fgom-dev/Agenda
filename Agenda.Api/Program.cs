@@ -1,3 +1,4 @@
+using Agenda.Api.Middlewares;
 using Agenda.Domain.DTOs.Mappings;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Infra.Context;
@@ -79,14 +80,21 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI();
 
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/Usuarios"), appBuilder =>
+{
+    appBuilder.UseMiddleware<AdminAuthorization>();
+});
+
+//app.UseMiddleware<AdminAuthorization>();
 
 app.UseMiddleware<CustomExceptionHandler>();
 

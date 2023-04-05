@@ -36,13 +36,28 @@ namespace Agenda.Domain.Services
                 expires: expiration,
                 signingCredentials: credentials);
 
+            var usuarioSaida = new UsuarioSaidaDto
+            {
+                Email = usuario.Email,
+                IsAdmin = usuario.IsAdmin,
+                PessoaId = usuario.PessoaId,
+                Pessoa = usuario.Pessoa,
+            };
+
             return new UsuarioToken()
             {
                 Authenticated = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration,
                 Message = "Token JWT OK",
+                Usuario = usuarioSaida,
             };
+        }
+        
+        public static JwtSecurityToken Decode(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            return handler.ReadJwtToken(token);
         }
     }
 }

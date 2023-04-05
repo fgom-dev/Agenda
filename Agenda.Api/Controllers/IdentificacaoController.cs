@@ -13,11 +13,9 @@ namespace Agenda.Api.Controllers
     public class IdentificacaoController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
-        public IdentificacaoController(IUnitOfWork uow, IMapper mapper)
+        public IdentificacaoController(IUnitOfWork uow)
         {
             _uow = uow;
-            _mapper = mapper;
         }
 
         [HttpPost("registrar")]
@@ -34,11 +32,11 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UsuarioEntradaDto usuarioEntradaDto)
+        public async Task<ActionResult> Login([FromBody] UsuarioLoginDto usuarioLoginDto)
         {
-            var usuario = await _uow.UsuarioRepository.GetByEmail(usuarioEntradaDto.Email);
+            var usuario = await _uow.UsuarioRepository.GetByEmail(usuarioLoginDto.Email);
 
-            Crypt.Comparar(usuario.PasswordHash, usuarioEntradaDto.Password);
+            Crypt.Comparar(usuario.PasswordHash, usuarioLoginDto.Password);
             
             return Ok(TokenService.GeraToken(usuario));           
             
