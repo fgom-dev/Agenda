@@ -1,4 +1,3 @@
-using Agenda.Api.Middlewares;
 using Agenda.Domain.DTOs.Mappings;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Infra.Context;
