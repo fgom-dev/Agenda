@@ -13,7 +13,7 @@ using System.Text.Json;
 
 namespace Agenda.Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
@@ -27,17 +27,6 @@ namespace Agenda.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAll([FromQuery] PaginationParameters parameters)
         {
-            var token = Request.Headers.Authorization.ToString().Split()[1];
-
-            var tokenDecoded = TokenService.Decode(token);
-
-            var isAdmin = tokenDecoded.Payload["IsAdmin"].ToString() == "True";
-
-            if (!isAdmin)
-            {
-                throw new CustomException(HttpStatusCode.Unauthorized, "Não autorizado!");
-            }
-
             var usuarios = await _uow.UsuarioRepository.Get(parameters);
 
             var metadata = new

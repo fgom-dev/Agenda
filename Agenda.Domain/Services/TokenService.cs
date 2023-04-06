@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Agenda.Domain.Services
@@ -20,7 +21,7 @@ namespace Agenda.Domain.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
-                new Claim("IsAdmin", usuario.IsAdmin.ToString()),
+                usuario.IsAdmin ? new Claim(ClaimTypes.Role, "IsAdmin") : new Claim(ClaimTypes.Role, "IsUser"),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
@@ -33,7 +34,7 @@ namespace Agenda.Domain.Services
                 issuer: config["TokenConfiguration:Issuer"],
                 audience: config["TokenConfiguration:Audience"],
                 claims: claims,
-                expires: expiration,
+                expires: expiration,                
                 signingCredentials: credentials);
 
             var usuarioSaida = new UsuarioSaidaDto
@@ -52,12 +53,6 @@ namespace Agenda.Domain.Services
                 Message = "Token JWT OK",
                 Usuario = usuarioSaida,
             };
-        }
-        
-        public static JwtSecurityToken Decode(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            return handler.ReadJwtToken(token);
         }
     }
 }

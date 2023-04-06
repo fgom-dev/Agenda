@@ -89,13 +89,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/Usuarios"), appBuilder =>
-{
-    appBuilder.UseMiddleware<AdminAuthorization>();
-});
-
-//app.UseMiddleware<AdminAuthorization>();
-
 app.UseMiddleware<CustomExceptionHandler>();
 
 app.Run();
