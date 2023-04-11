@@ -3,7 +3,6 @@ using Agenda.Domain.Models;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Domain.Services;
 using Agenda.Shared.Services;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Agenda.Api.Controllers

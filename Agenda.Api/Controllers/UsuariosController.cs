@@ -5,45 +5,55 @@ using Agenda.Domain.Repositories.UOW;
 using Agenda.Domain.Services;
 using Agenda.Shared.Errors;
 using Agenda.Shared.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 
 namespace Agenda.Api.Controllers
-{
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
+{    
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        public UsuariosController(IUnitOfWork uow)
+        private readonly IMapper _mapper;
+        public UsuariosController(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
         [HttpGet]
         public async Task<ActionResult> GetAll([FromQuery] PaginationParameters parameters)
         {
-            var usuarios = await _uow.UsuarioRepository.Get(parameters);
+            var usuarios = await _uow.UsuarioRepository.Get();
+
+            var usuariosSaidaDto = _mapper.Map<List<UsuarioSaidaDto>>(usuarios);
+
+            var usuariosSaidaDtoPaged = PagedList<UsuarioSaidaDto>.ToPagedList(usuariosSaidaDto, parameters.PageNumber, parameters.PageSize);
 
             var metadata = new
             {
-                usuarios.PageSize,
-                usuarios.TotalCount,
-                usuarios.CurrentPage,
-                usuarios.TotalPages,
-                usuarios.HasNext,
-                usuarios.HasPrevious
+                usuariosSaidaDtoPaged.PageSize,
+                usuariosSaidaDtoPaged.TotalCount,
+                usuariosSaidaDtoPaged.CurrentPage,
+                usuariosSaidaDtoPaged.TotalPages,
+                usuariosSaidaDtoPaged.HasNext,
+                usuariosSaidaDtoPaged.HasPrevious
             };
+
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
-            return Ok(usuarios);
+            return Ok(usuariosSaidaDtoPaged);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(Guid id)
         {
@@ -51,6 +61,7 @@ namespace Agenda.Api.Controllers
             return Ok(usuario);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UsuarioDto usuarioDto)
         {
@@ -68,6 +79,7 @@ namespace Agenda.Api.Controllers
             return Ok(TokenService.GeraToken(usuario));
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(Guid id, [FromBody] UsuarioSaidaDto usuarioDto)
         {
@@ -89,6 +101,7 @@ namespace Agenda.Api.Controllers
             return Ok(usuario);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {

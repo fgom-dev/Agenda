@@ -39,6 +39,7 @@ namespace Agenda.Domain.Services
 
             var usuarioSaida = new UsuarioSaidaDto
             {
+                Id = usuario.Id,
                 Email = usuario.Email,
                 IsAdmin = usuario.IsAdmin,
                 PessoaId = usuario.PessoaId,

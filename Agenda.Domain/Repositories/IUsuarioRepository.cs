@@ -5,5 +5,6 @@ namespace Agenda.Domain.Repositories
     public interface IUsuarioRepository : IRepository<Usuario>
     {
         Task<Usuario> GetByEmail(string email);
+        Task<IList<Usuario>> Get();
     }
 }

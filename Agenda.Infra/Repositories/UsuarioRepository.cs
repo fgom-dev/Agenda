@@ -3,12 +3,7 @@ using Agenda.Domain.Repositories;
 using Agenda.Infra.Context;
 using Agenda.Shared.Errors;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Agenda.Infra.Repositories
 {
@@ -16,6 +11,18 @@ namespace Agenda.Infra.Repositories
     {
         public UsuarioRepository(AgendaContext context) : base(context)
         {
+        }
+
+        public async Task<IList<Usuario>> Get()
+        {
+            try
+            {
+                return await _context.Usuarios.AsNoTracking().ToListAsync();
+            }
+            catch
+            {
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+            }
         }
 
         public async Task<Usuario> GetByEmail(string email)
@@ -32,6 +39,6 @@ namespace Agenda.Infra.Repositories
             {
                 throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
             }
-        }
+        }        
     }
 }
