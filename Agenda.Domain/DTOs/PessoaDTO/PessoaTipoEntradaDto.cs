@@ -1,6 +1,6 @@
-﻿namespace Agenda.Domain.DTOs
+﻿namespace Agenda.Domain.DTOs.PessoaDTO
 {
-    public class DocumentoTipoEntradaDto
+    public class PessoaTipoEntradaDto
     {
         public Guid? Id { get; set; }
         public string? Nome { get; set; }

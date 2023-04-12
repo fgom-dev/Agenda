@@ -15,6 +15,7 @@ namespace Agenda.Infra.Context
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<DocumentoTipo> DocumentoTipos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Turma> Turmas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {            
@@ -22,6 +23,7 @@ namespace Agenda.Infra.Context
             modelBuilder.ApplyConfiguration(new PessoaMap());
             modelBuilder.ApplyConfiguration(new DocumentoTipoMap());
             modelBuilder.ApplyConfiguration(new UsuarioMap());
+            modelBuilder.ApplyConfiguration(new TurmaMap());
         }
     }
 }

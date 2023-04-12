@@ -1,4 +1,4 @@
-﻿using Agenda.Domain.DTOs;
+﻿using Agenda.Domain.DTOs.UsuarioDTO;
 using Agenda.Domain.Models;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Domain.Services;

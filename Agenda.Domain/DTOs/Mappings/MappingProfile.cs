@@ -1,5 +1,7 @@
-﻿using Agenda.Domain.Models;
-using Agenda.Domain.Pagination;
+﻿using Agenda.Domain.DTOs.DocumentoTipoDTO;
+using Agenda.Domain.DTOs.PessoaDTO;
+using Agenda.Domain.DTOs.UsuarioDTO;
+using Agenda.Domain.Models;
 using AutoMapper;
 
 namespace Agenda.Domain.DTOs.Mappings

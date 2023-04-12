@@ -11,5 +11,6 @@
         public Guid? DocumentoTipoId { get; set; }
         public DocumentoTipo? DocumentoTipo { get; set; }
         public string? Documento { get; set; }
+        public Guid? TurmaId { get; set; }
     }
 }

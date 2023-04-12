@@ -1,6 +1,6 @@
 ﻿using Agenda.Domain.Models;
 
-namespace Agenda.Domain.DTOs
+namespace Agenda.Domain.DTOs.UsuarioDTO
 {
     public class UsuarioSaidaDto
     {

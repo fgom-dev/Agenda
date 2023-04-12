@@ -12,6 +12,7 @@ namespace Agenda.Infra.DataMap
             builder.HasKey(x => x.Id);
             builder.Property(x => x.PessoaTipoId).IsRequired(false);
             builder.Property(x => x.DocumentoTipoId).IsRequired(false);
+            builder.Property(x => x.TurmaId).IsRequired(false);
             builder.Property(x => x.DataNascimento).IsRequired();
             builder.Property(x => x.Sexo).HasMaxLength(20).IsRequired();
             builder.Property(x => x.Nome).HasMaxLength(50).IsRequired();
@@ -20,7 +21,7 @@ namespace Agenda.Infra.DataMap
             builder.HasIndex(x => x.Documento).IsUnique();
 
             builder.HasOne(x => x.PessoaTipo).WithMany().HasForeignKey(x => x.PessoaTipoId);
-            builder.HasOne(x => x.DocumentoTipo).WithMany().HasForeignKey(x => x.DocumentoTipoId);
+            builder.HasOne(x => x.DocumentoTipo).WithMany().HasForeignKey(x => x.DocumentoTipoId);            
         }
     }
 }

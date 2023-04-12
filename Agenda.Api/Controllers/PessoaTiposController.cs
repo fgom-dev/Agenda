@@ -1,4 +1,4 @@
-﻿using Agenda.Domain.DTOs;
+﻿using Agenda.Domain.DTOs.PessoaDTO;
 using Agenda.Domain.Models;
 using Agenda.Domain.Pagination;
 using Agenda.Domain.Repositories.UOW;

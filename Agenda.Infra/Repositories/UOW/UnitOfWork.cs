@@ -10,6 +10,7 @@ namespace Agenda.Infra.Repositories.UOW
         private DocumentoTipoRepository _documentoTipoRepo;
         private PessoaTipoRepository _pessoaTipoRepo;
         private UsuarioRepository _usuarioRepo;
+        private TurmaRepository _turmaRepo;
         public AgendaContext _context;
         public UnitOfWork(AgendaContext context)
         {
@@ -33,6 +34,11 @@ namespace Agenda.Infra.Repositories.UOW
         public IUsuarioRepository UsuarioRepository
         {
             get { return _usuarioRepo ??= new UsuarioRepository(_context); }
+        }
+
+        public ITurmaRepository TurmaRepository
+        {
+            get { return _turmaRepo ??= new TurmaRepository(_context); }
         }
 
         public async Task Commit()

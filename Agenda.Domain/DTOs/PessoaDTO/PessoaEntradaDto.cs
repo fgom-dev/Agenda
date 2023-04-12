@@ -1,4 +1,4 @@
-﻿namespace Agenda.Domain.DTOs
+﻿namespace Agenda.Domain.DTOs.PessoaDTO
 {
     public class PessoaEntradaDto
     {
@@ -10,5 +10,6 @@
         public string? Sexo { get; set; }
         public Guid? DocumentoTipoId { get; set; }
         public string? Documento { get; set; }
+        public Guid? TurmaId { get; set; }
     }
 }

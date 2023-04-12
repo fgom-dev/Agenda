@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Agenda.Domain.DTOs
+﻿namespace Agenda.Domain.DTOs.UsuarioDTO
 {
     public class UsuarioToken
     {
@@ -12,6 +6,6 @@ namespace Agenda.Domain.DTOs
         public DateTime Expiration { get; set; }
         public string? Token { get; set; }
         public string? Message { get; set; }
-        public UsuarioSaidaDto? Usuario { get; set;}
+        public UsuarioSaidaDto? Usuario { get; set; }
     }
 }

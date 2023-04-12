@@ -1,4 +1,4 @@
-﻿using Agenda.Domain.DTOs;
+﻿using Agenda.Domain.DTOs.UsuarioDTO;
 using Agenda.Domain.Models;
 using Agenda.Domain.Pagination;
 using Agenda.Domain.Repositories.UOW;
@@ -9,12 +9,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 
 namespace Agenda.Api.Controllers
-{    
+{
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
