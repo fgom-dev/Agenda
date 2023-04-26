@@ -5,7 +5,7 @@
         public string? Email { get; set; }
         public string? PasswordHash { get; set; }
         public bool IsAdmin { get; set; }
-        public Guid? PessoaId { get; set; }
+        public int? PessoaId { get; set; }
         public Pessoa? Pessoa { get; set; }
     }
 }

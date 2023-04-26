@@ -31,14 +31,14 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UsuarioLoginDto usuarioLoginDto)
+        public async Task<ActionResult> Login([FromBody] UsuarioEntradaDto usuarioLoginDto)
         {
             var usuario = await _uow.UsuarioRepository.GetByEmail(usuarioLoginDto.Email);
 
             Crypt.Comparar(usuario.PasswordHash, usuarioLoginDto.Password);
-            
-            return Ok(TokenService.GeraToken(usuario));           
-            
+
+            return Ok(TokenService.GeraToken(usuario));
+
         }
     }
 }

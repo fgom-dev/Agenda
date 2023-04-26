@@ -24,9 +24,11 @@ namespace Agenda.Infra.Migrations
 
             modelBuilder.Entity("Agenda.Domain.Models.DocumentoTipo", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -53,9 +55,11 @@ namespace Agenda.Infra.Migrations
 
             modelBuilder.Entity("Agenda.Domain.Models.Pessoa", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -68,16 +72,18 @@ namespace Agenda.Infra.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<Guid?>("DocumentoTipoId")
-                        .HasColumnType("uuid");
+                    b.Property<int?>("DocumentoTipoId")
+                        .IsRequired()
+                        .HasColumnType("integer");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid?>("PessoaTipoId")
-                        .HasColumnType("uuid");
+                    b.Property<int?>("PessoaTipoId")
+                        .IsRequired()
+                        .HasColumnType("integer");
 
                     b.Property<string>("Sexo")
                         .IsRequired()
@@ -89,8 +95,8 @@ namespace Agenda.Infra.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid?>("TurmaId")
-                        .HasColumnType("uuid");
+                    b.Property<int?>("TurmaId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -109,11 +115,47 @@ namespace Agenda.Infra.Migrations
                     b.ToTable("Pessoa", (string)null);
                 });
 
+            modelBuilder.Entity("Agenda.Domain.Models.PessoaRecado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PessoaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecadoId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecadoStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PessoaId");
+
+                    b.HasIndex("RecadoId");
+
+                    b.HasIndex("RecadoStatusId");
+
+                    b.ToTable("PessoaRecado", (string)null);
+                });
+
             modelBuilder.Entity("Agenda.Domain.Models.PessoaTipo", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -138,11 +180,107 @@ namespace Agenda.Infra.Migrations
                     b.ToTable("PessoaTipo", (string)null);
                 });
 
+            modelBuilder.Entity("Agenda.Domain.Models.Recado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Mensagem")
+                        .HasColumnType("text");
+
+                    b.Property<int>("RecadoTipoId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecadoTipoId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Recado", (string)null);
+                });
+
+            modelBuilder.Entity("Agenda.Domain.Models.RecadoStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
+                    b.ToTable("RecadoStatus", (string)null);
+                });
+
+            modelBuilder.Entity("Agenda.Domain.Models.RecadoTipo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Nome")
+                        .IsUnique();
+
+                    b.ToTable("RecadoTipo", (string)null);
+                });
+
             modelBuilder.Entity("Agenda.Domain.Models.Turma", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -171,9 +309,11 @@ namespace Agenda.Infra.Migrations
 
             modelBuilder.Entity("Agenda.Domain.Models.Usuario", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -191,8 +331,8 @@ namespace Agenda.Infra.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("PessoaId")
-                        .HasColumnType("uuid");
+                    b.Property<int?>("PessoaId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -212,19 +352,69 @@ namespace Agenda.Infra.Migrations
                 {
                     b.HasOne("Agenda.Domain.Models.DocumentoTipo", "DocumentoTipo")
                         .WithMany()
-                        .HasForeignKey("DocumentoTipoId");
+                        .HasForeignKey("DocumentoTipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Agenda.Domain.Models.PessoaTipo", "PessoaTipo")
                         .WithMany()
-                        .HasForeignKey("PessoaTipoId");
+                        .HasForeignKey("PessoaTipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Agenda.Domain.Models.Turma", null)
-                        .WithMany("Alunos")
+                    b.HasOne("Agenda.Domain.Models.Turma", "Turma")
+                        .WithMany()
                         .HasForeignKey("TurmaId");
 
                     b.Navigation("DocumentoTipo");
 
                     b.Navigation("PessoaTipo");
+
+                    b.Navigation("Turma");
+                });
+
+            modelBuilder.Entity("Agenda.Domain.Models.PessoaRecado", b =>
+                {
+                    b.HasOne("Agenda.Domain.Models.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agenda.Domain.Models.Recado", "Recado")
+                        .WithMany()
+                        .HasForeignKey("RecadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agenda.Domain.Models.RecadoStatus", "RecadoStatus")
+                        .WithMany()
+                        .HasForeignKey("RecadoStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
+
+                    b.Navigation("Recado");
+
+                    b.Navigation("RecadoStatus");
+                });
+
+            modelBuilder.Entity("Agenda.Domain.Models.Recado", b =>
+                {
+                    b.HasOne("Agenda.Domain.Models.RecadoTipo", "RecadoTipo")
+                        .WithMany()
+                        .HasForeignKey("RecadoTipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Agenda.Domain.Models.Usuario", null)
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RecadoTipo");
                 });
 
             modelBuilder.Entity("Agenda.Domain.Models.Usuario", b =>
@@ -234,11 +424,6 @@ namespace Agenda.Infra.Migrations
                         .HasForeignKey("Agenda.Domain.Models.Usuario", "PessoaId");
 
                     b.Navigation("Pessoa");
-                });
-
-            modelBuilder.Entity("Agenda.Domain.Models.Turma", b =>
-                {
-                    b.Navigation("Alunos");
                 });
 #pragma warning restore 612, 618
         }

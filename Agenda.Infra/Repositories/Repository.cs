@@ -3,6 +3,7 @@ using Agenda.Domain.Pagination;
 using Agenda.Domain.Repositories;
 using Agenda.Infra.Context;
 using Agenda.Shared.Errors;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -11,15 +12,17 @@ namespace Agenda.Infra.Repositories
     public class Repository<T> : IRepository<T> where T : Entity
     {
         protected AgendaContext _context;
+        protected IMapper _mapper;
 
-        public Repository(AgendaContext context)
+        public Repository(AgendaContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public void Add(T entity)
         {
             try
-            {                
+            {
                 entity.CreatedAt = DateTime.UtcNow;
                 entity.UpdatedAt = DateTime.UtcNow;
                 _context.Set<T>().Add(entity);
@@ -34,7 +37,7 @@ namespace Agenda.Infra.Repositories
         {
             try
             {
-                _context.Set<T>().Remove(entity);                
+                _context.Set<T>().Remove(entity);
             }
             catch
             {
@@ -46,7 +49,8 @@ namespace Agenda.Infra.Repositories
         {
             try
             {
-                return PagedList<T>.ToPagedList(await _context.Set<T>().AsNoTracking().ToListAsync(), parameters.PageNumber, parameters.PageSize);
+                return PagedList<T>.ToPagedList(await _context.Set<T>()
+                    .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
             catch
             {
@@ -54,7 +58,7 @@ namespace Agenda.Infra.Repositories
             }
         }
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T> GetById(int id)
         {
             try
             {
@@ -73,7 +77,7 @@ namespace Agenda.Infra.Repositories
         public void Update(T entity)
         {
             try
-            {                     
+            {
                 entity.UpdatedAt = DateTime.UtcNow;
                 _context.Set<T>().Update(entity);
             }

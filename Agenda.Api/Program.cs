@@ -26,7 +26,10 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddDbContext<AgendaContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("Render")));
+{
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("Render"));
+    opt.EnableSensitiveDataLogging();
+});
 
 builder.Services.AddAuthentication(
     JwtBearerDefaults.AuthenticationScheme).

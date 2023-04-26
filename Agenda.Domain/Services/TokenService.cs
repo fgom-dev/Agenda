@@ -4,13 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Agenda.Domain.Services
 {
     public class TokenService
-    {        
+    {
         public static UsuarioToken GeraToken(Usuario usuario)
         {
             IConfiguration config = new ConfigurationBuilder()
@@ -21,7 +20,7 @@ namespace Agenda.Domain.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
-                usuario.IsAdmin ? new Claim(ClaimTypes.Role, "IsAdmin") : new Claim(ClaimTypes.Role, "IsUser"),
+                usuario.IsAdmin ? new Claim(ClaimTypes.Role, "Admin") : new Claim(ClaimTypes.Role, "User"),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
@@ -34,7 +33,7 @@ namespace Agenda.Domain.Services
                 issuer: config["TokenConfiguration:Issuer"],
                 audience: config["TokenConfiguration:Audience"],
                 claims: claims,
-                expires: expiration,                
+                expires: expiration,
                 signingCredentials: credentials);
 
             var usuarioSaida = new UsuarioSaidaDto

@@ -1,7 +1,10 @@
-﻿using Agenda.Domain.Models;
+﻿using Agenda.Domain.DTOs.UsuarioDTO;
+using Agenda.Domain.Models;
+using Agenda.Domain.Pagination;
 using Agenda.Domain.Repositories;
 using Agenda.Infra.Context;
 using Agenda.Shared.Errors;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -9,15 +12,18 @@ namespace Agenda.Infra.Repositories
 {
     public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     {
-        public UsuarioRepository(AgendaContext context) : base(context)
+        public UsuarioRepository(AgendaContext context, IMapper mapper) : base(context, mapper)
         {
         }
 
-        public async Task<IList<Usuario>> Get()
+        public async Task<PagedList<UsuarioSaidaDto>> Get(PaginationParameters parameters)
         {
             try
             {
-                return await _context.Usuarios.AsNoTracking().ToListAsync();
+                var usuarios = await _context.Usuarios.AsNoTracking().ToListAsync();
+                var usuariosSaidaDto = _mapper.Map<List<UsuarioSaidaDto>>(usuarios);
+                var usuariosSaidaDtoPaged = PagedList<UsuarioSaidaDto>.ToPagedList(usuariosSaidaDto, parameters.PageNumber, parameters.PageSize);
+                return usuariosSaidaDtoPaged;
             }
             catch
             {
@@ -39,6 +45,6 @@ namespace Agenda.Infra.Repositories
             {
                 throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
             }
-        }        
+        }
     }
 }

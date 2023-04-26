@@ -1,12 +1,11 @@
-﻿using Agenda.Domain.Models;
-using Agenda.Domain.Pagination;
+﻿using Agenda.Domain.DTOs.PessoaDTO;
+using Agenda.Domain.Models;
 
 namespace Agenda.Domain.Repositories
 {
     public interface IPessoaRepository : IRepository<Pessoa>
     {
-        Task<PagedList<Pessoa>> Get(PaginationParameters parameters);
-        Task<Pessoa> GetById(Guid id);
         Task<Pessoa> GetByDocumento(string documento);
+        Pessoa Add(PessoaEntradaDto pessoaEntrada);
     }
 }

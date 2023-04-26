@@ -4,10 +4,10 @@ namespace Agenda.Domain.DTOs.UsuarioDTO
 {
     public class UsuarioDto
     {
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
-        public Guid? PessoaId { get; set; }
+        public int? PessoaId { get; set; }
         public Pessoa? Pessoa { get; set; }
         public bool IsAdmin { get; set; }
     }

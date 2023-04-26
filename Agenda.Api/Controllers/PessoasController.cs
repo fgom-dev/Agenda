@@ -18,15 +18,13 @@ namespace Agenda.Api.Controllers
     public class PessoasController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
-        public PessoasController(IUnitOfWork uow, IMapper mapper)
+        public PessoasController(IUnitOfWork uow)
         {
             _uow = uow;
-            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pessoa>>> GetAll([FromQuery] PaginationParameters parameters)
+        public async Task<ActionResult> GetAll([FromQuery] PaginationParameters parameters)
         {
             var pessoas = await _uow.PessoaRepository.Get(parameters);
 
@@ -46,30 +44,29 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pessoa>> GetById(Guid id)
+        public async Task<ActionResult> GetById(int id)
         {
             var pessoa = await _uow.PessoaRepository.GetById(id);
             return Ok(pessoa);
         }
 
         [HttpGet("documento/{documento}")]
-        public async Task<ActionResult<Pessoa>> GetByDocumento(string documento)
+        public async Task<ActionResult> GetByDocumento(string documento)
         {
             var pessoa = await _uow.PessoaRepository.GetByDocumento(documento);
             return Ok(pessoa);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Pessoa>> Post([FromBody] PessoaEntradaDto pessoaEntradaDto)
+        public async Task<ActionResult> Post([FromBody] PessoaEntradaDto pessoaEntradaDto)
         {
-            var pessoa = _mapper.Map<Pessoa>(pessoaEntradaDto);
-            _uow.PessoaRepository.Add(pessoa);
+            var pessoa = _uow.PessoaRepository.Add(pessoaEntradaDto);
             await _uow.Commit();
             return Ok(pessoa);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Pessoa>> Put(Guid id, [FromBody] PessoaEntradaDto pessoaEntradaDto)
+        public async Task<ActionResult> Put(int id, [FromBody] PessoaEntradaDto pessoaEntradaDto)
         {
             if (id != pessoaEntradaDto.Id)
             {
@@ -94,7 +91,7 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Pessoa>> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             var pessoa = await _uow.PessoaRepository.GetById(id);
             _uow.PessoaRepository.Delete(pessoa);

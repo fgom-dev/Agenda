@@ -19,48 +19,42 @@ namespace Agenda.Api.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
         public UsuariosController(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
-            _mapper = mapper;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult> GetAll([FromQuery] PaginationParameters parameters)
         {
-            var usuarios = await _uow.UsuarioRepository.Get();
-
-            var usuariosSaidaDto = _mapper.Map<List<UsuarioSaidaDto>>(usuarios);
-
-            var usuariosSaidaDtoPaged = PagedList<UsuarioSaidaDto>.ToPagedList(usuariosSaidaDto, parameters.PageNumber, parameters.PageSize);
+            var usuarios = await _uow.UsuarioRepository.Get(parameters);
 
             var metadata = new
             {
-                usuariosSaidaDtoPaged.PageSize,
-                usuariosSaidaDtoPaged.TotalCount,
-                usuariosSaidaDtoPaged.CurrentPage,
-                usuariosSaidaDtoPaged.TotalPages,
-                usuariosSaidaDtoPaged.HasNext,
-                usuariosSaidaDtoPaged.HasPrevious
+                usuarios.PageSize,
+                usuarios.TotalCount,
+                usuarios.CurrentPage,
+                usuarios.TotalPages,
+                usuarios.HasNext,
+                usuarios.HasPrevious
             };
 
 
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
-            return Ok(usuariosSaidaDtoPaged);
+            return Ok(usuarios);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(Guid id)
+        public async Task<ActionResult> GetById(int id)
         {
             var usuario = await _uow.UsuarioRepository.GetById(id);
             return Ok(usuario);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UsuarioDto usuarioDto)
         {
@@ -80,7 +74,7 @@ namespace Agenda.Api.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] UsuarioSaidaDto usuarioDto)
+        public async Task<ActionResult> Put(int id, [FromBody] UsuarioSaidaDto usuarioDto)
         {
             if (id != usuarioDto.Id)
             {
@@ -92,7 +86,7 @@ namespace Agenda.Api.Controllers
             usuario.Email = usuarioDto.Email;
             usuario.PessoaId = usuarioDto.PessoaId;
             usuario.Pessoa = usuarioDto.Pessoa;
-            usuario.IsAdmin = usuarioDto.IsAdmin;           
+            usuario.IsAdmin = usuarioDto.IsAdmin;
 
             _uow.UsuarioRepository.Update(usuario);
             await _uow.Commit();
@@ -100,14 +94,14 @@ namespace Agenda.Api.Controllers
             return Ok(usuario);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "IsAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             var usuario = await _uow.UsuarioRepository.GetById(id);
             _uow.UsuarioRepository.Delete(usuario);
             await _uow.Commit();
             return Ok(usuario);
         }
-    }    
+    }
 }

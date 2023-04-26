@@ -14,7 +14,7 @@ namespace Agenda.Infra.DataMap
             builder.Property(x => x.Descricao).HasMaxLength(255).IsRequired(false);
             builder.Property(x => x.Periodo).HasMaxLength(20).IsRequired();
 
-            builder.HasMany(x => x.Alunos).WithOne().HasForeignKey(x => x.TurmaId);
+
         }
     }
 }

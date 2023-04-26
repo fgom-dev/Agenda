@@ -1,9 +1,7 @@
 ﻿using Agenda.Domain.DTOs.DocumentoTipoDTO;
-using Agenda.Domain.Models;
 using Agenda.Domain.Pagination;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Shared.Errors;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +16,13 @@ namespace Agenda.Api.Controllers
     public class DocumentoTiposController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
-        private readonly IMapper _mapper;
-        public DocumentoTiposController(IUnitOfWork uow, IMapper mapper)
+        public DocumentoTiposController(IUnitOfWork uow)
         {
             _uow = uow;
-            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DocumentoTipo>>> GetAll([FromQuery] PaginationParameters parameters)
+        public async Task<ActionResult> GetAll([FromQuery] PaginationParameters parameters)
         {
             var documentoTipos = await _uow.DocumentoTipoRepository.Get(parameters);
 
@@ -46,23 +42,22 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<DocumentoTipo>> GetById(Guid id)
+        public async Task<ActionResult> GetById(int id)
         {
             var documentoTipo = await _uow.DocumentoTipoRepository.GetById(id);
             return Ok(documentoTipo);
         }
 
         [HttpPost]
-        public async Task<ActionResult<DocumentoTipo>> Post([FromBody] DocumentoTipoEntradaDto documentoTipoEntradaDto)
+        public async Task<ActionResult> Post([FromBody] DocumentoTipoEntradaDto documentoTipoEntradaDto)
         {
-            var documentoTipo = _mapper.Map<DocumentoTipo>(documentoTipoEntradaDto);
-            _uow.DocumentoTipoRepository.Add(documentoTipo);
-            await _uow.Commit();            
+            var documentoTipo = _uow.DocumentoTipoRepository.Add(documentoTipoEntradaDto);
+            await _uow.Commit();
             return Ok(documentoTipo);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<DocumentoTipo>> Put(Guid id, [FromBody] DocumentoTipoEntradaDto documentoTipoEntradaDto)
+        public async Task<ActionResult> Put(int id, [FromBody] DocumentoTipoEntradaDto documentoTipoEntradaDto)
         {
             if (id != documentoTipoEntradaDto.Id)
             {
@@ -80,7 +75,7 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<DocumentoTipo>> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             var documentoTipo = await _uow.DocumentoTipoRepository.GetById(id);
             _uow.DocumentoTipoRepository.Delete(documentoTipo);

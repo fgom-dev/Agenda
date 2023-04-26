@@ -27,5 +27,10 @@
 
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }
+
+        public static object ToPagedList(object value, int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

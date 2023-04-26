@@ -2,8 +2,6 @@
 using Agenda.Domain.Pagination;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Shared.Errors;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.Json;
@@ -43,7 +41,7 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(Guid id)
+        public async Task<ActionResult> GetById(int id)
         {
             var turma = await _uow.TurmaRepository.GetById(id);
             return Ok(turma);
@@ -58,7 +56,7 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Turma turmaEntrada)
+        public async Task<ActionResult> Put(int id, [FromBody] Turma turmaEntrada)
         {
             if (turmaEntrada.Id != id)
             {
@@ -76,7 +74,7 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> Delete(int id)
         {
             var turma = await _uow.TurmaRepository.GetById(id);
             _uow.TurmaRepository.Delete(turma);
