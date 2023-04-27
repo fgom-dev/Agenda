@@ -23,7 +23,8 @@ namespace Agenda.Api.Controllers
             var usuario = new Usuario
             {
                 Email = usuarioEntradaDto.Email,
-                PasswordHash = Crypt.GerarHash(usuarioEntradaDto.Password),
+                PasswordHash = Crypt.GerarHash(usuarioEntradaDto.Password!),
+                PessoaId = usuarioEntradaDto.PessoaId,
             };
             _uow.UsuarioRepository.Add(usuario);
             await _uow.Commit();
@@ -31,11 +32,11 @@ namespace Agenda.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UsuarioEntradaDto usuarioLoginDto)
+        public async Task<ActionResult> Login([FromBody] UsuarioLoginDto usuarioLoginDto)
         {
-            var usuario = await _uow.UsuarioRepository.GetByEmail(usuarioLoginDto.Email);
+            var usuario = await _uow.UsuarioRepository.GetByEmail(usuarioLoginDto.Email!);
 
-            Crypt.Comparar(usuario.PasswordHash, usuarioLoginDto.Password);
+            Crypt.Comparar(usuario.PasswordHash!, usuarioLoginDto.Password!);
 
             return Ok(TokenService.GeraToken(usuario));
 
