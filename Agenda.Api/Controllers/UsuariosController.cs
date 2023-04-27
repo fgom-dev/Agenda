@@ -10,10 +10,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace Agenda.Api.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
@@ -24,7 +26,7 @@ namespace Agenda.Api.Controllers
             _uow = uow;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult> GetAll([FromQuery] PaginationParameters parameters)
         {
@@ -46,7 +48,7 @@ namespace Agenda.Api.Controllers
             return Ok(usuarios);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
@@ -54,7 +56,7 @@ namespace Agenda.Api.Controllers
             return Ok(usuario);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] UsuarioDto usuarioDto)
         {
@@ -63,7 +65,6 @@ namespace Agenda.Api.Controllers
                 Email = usuarioDto.Email,
                 PasswordHash = Crypt.GerarHash(usuarioDto.Password),
                 PessoaId = usuarioDto.PessoaId,
-                Pessoa = usuarioDto.Pessoa,
                 IsAdmin = usuarioDto.IsAdmin,
             };
 
@@ -71,11 +72,13 @@ namespace Agenda.Api.Controllers
             await _uow.Commit();
             return Ok(TokenService.GeraToken(usuario));
         }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UsuarioSaidaDto usuarioDto)
+        public async Task<ActionResult> Put(int id, [FromBody] UsuarioEntradaDto usuarioDto)
         {
+            var email = User.Claims.Where(x => x.Type == ClaimTypes.Email).Select(x => x.Value).ToList()[0];
+            var isAdmin = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToList().Exists(x => x == "Admin");
+
             if (id != usuarioDto.Id)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, "Requisição inválida!");
@@ -83,10 +86,13 @@ namespace Agenda.Api.Controllers
 
             var usuario = await _uow.UsuarioRepository.GetById(id);
 
+            if (usuario.Email != email && !isAdmin)
+            {
+                throw new CustomException(HttpStatusCode.Unauthorized, "Não Autorizado!");
+            }
+
             usuario.Email = usuarioDto.Email;
             usuario.PessoaId = usuarioDto.PessoaId;
-            usuario.Pessoa = usuarioDto.Pessoa;
-            usuario.IsAdmin = usuarioDto.IsAdmin;
 
             _uow.UsuarioRepository.Update(usuario);
             await _uow.Commit();
@@ -94,7 +100,7 @@ namespace Agenda.Api.Controllers
             return Ok(usuario);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

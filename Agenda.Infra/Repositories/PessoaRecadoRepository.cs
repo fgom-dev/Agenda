@@ -15,12 +15,25 @@ namespace Agenda.Infra.Repositories
         {            
         }
 
-        public async Task<PagedList<PessoaRecado>> Get(PaginationParameters parameters, int pessoaId)
+        public async Task<PagedList<PessoaRecado>> GetAll(PaginationParameters parameters)
         {
             try
             {
                 return PagedList<PessoaRecado>.ToPagedList(await _context.PessoasRecados
-                    .Where(x => x.PessoaId == pessoaId)
+                    .ToListAsync(), parameters.PageNumber, parameters.PageSize);
+            }
+            catch
+            {
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+            }
+        }
+
+        public async Task<PagedList<PessoaRecado>> GetByUserId(PaginationParameters parameters, int pessoaId)
+        {
+            try
+            {
+                return PagedList<PessoaRecado>.ToPagedList(await _context.PessoasRecados
+                    .Where(x => x.PessoaId == pessoaId && x.RecadoStatusId == 1)                    
                     .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
             catch

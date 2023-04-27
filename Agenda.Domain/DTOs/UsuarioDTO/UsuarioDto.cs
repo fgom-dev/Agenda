@@ -1,6 +1,4 @@
-﻿using Agenda.Domain.Models;
-
-namespace Agenda.Domain.DTOs.UsuarioDTO
+﻿namespace Agenda.Domain.DTOs.UsuarioDTO
 {
     public class UsuarioDto
     {
@@ -8,7 +6,6 @@ namespace Agenda.Domain.DTOs.UsuarioDTO
         public string? Email { get; set; }
         public string? Password { get; set; }
         public int? PessoaId { get; set; }
-        public Pessoa? Pessoa { get; set; }
         public bool IsAdmin { get; set; }
     }
 }
