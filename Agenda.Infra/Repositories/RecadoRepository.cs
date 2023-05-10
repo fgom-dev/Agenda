@@ -22,7 +22,6 @@ namespace Agenda.Infra.Repositories
             recado.UsuarioId = usuarioId;
             recado.CreatedAt = DateTime.UtcNow;
             recado.UpdatedAt = DateTime.UtcNow;
-            recado.RecadoTipo = _context.RecadoTipos.SingleOrDefault(x => x.Id == recado.RecadoTipoId);
             _context.Recados.Add(recado);
             return recado;
         }

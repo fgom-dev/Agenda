@@ -82,7 +82,7 @@ namespace Agenda.Api.Controllers
             }
 
             recado.Mensagem = recadoEntradaDto.Mensagem;
-            recado.RecadoTipoId = recadoEntradaDto.RecadoTipoId;
+            recado.RecadoTipo = recadoEntradaDto.RecadoTipo;
 
             _uow.RecadoRepository.Update(recado);
             await _uow.Commit();
