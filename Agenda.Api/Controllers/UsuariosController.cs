@@ -74,7 +74,7 @@ namespace Agenda.Api.Controllers
         }
         
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UsuarioEntradaDto usuarioDto)
+        public async Task<ActionResult> Put(int id, [FromBody] UsuarioUpdateDto usuarioDto)
         {
             var email = User.Claims.Where(x => x.Type == ClaimTypes.Email).Select(x => x.Value).ToList()[0];
             var isAdmin = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToList().Exists(x => x == "Admin");
@@ -90,8 +90,7 @@ namespace Agenda.Api.Controllers
             {
                 throw new CustomException(HttpStatusCode.Unauthorized, "Não Autorizado!");
             }
-
-            usuario.Email = usuarioDto.Email;
+            
             usuario.PessoaId = usuarioDto.PessoaId;
 
             _uow.UsuarioRepository.Update(usuario);

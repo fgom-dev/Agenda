@@ -45,6 +45,6 @@ namespace Agenda.Infra.Repositories
             {
                 throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
             }
-        }
+        }               
     }
 }
