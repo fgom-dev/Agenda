@@ -1,7 +1,10 @@
 ﻿using Agenda.Domain.Repositories;
 using Agenda.Domain.Repositories.UOW;
 using Agenda.Infra.Context;
+using Agenda.Shared.Errors;
 using AutoMapper;
+using EntityFramework.Exceptions.Common;
+using System.Net;
 
 namespace Agenda.Infra.Repositories.UOW
 {
@@ -71,7 +74,15 @@ namespace Agenda.Infra.Repositories.UOW
 
         public async Task Commit()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }            
+            catch (Exception ex)
+            {
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
+            }
+
         }
     }
 }

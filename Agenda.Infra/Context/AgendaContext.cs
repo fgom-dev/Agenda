@@ -1,5 +1,6 @@
 ﻿using Agenda.Domain.Models;
 using Agenda.Infra.DataMap;
+using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 
 namespace Agenda.Infra.Context
@@ -32,6 +33,11 @@ namespace Agenda.Infra.Context
             modelBuilder.ApplyConfiguration(new PessoaRecadoMap());
             modelBuilder.ApplyConfiguration(new RecadoTipoMap());
             modelBuilder.ApplyConfiguration(new RecadoStatusMap());
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseExceptionProcessor();
         }
     }
 }

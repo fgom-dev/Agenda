@@ -72,14 +72,14 @@ namespace Agenda.Api.Controllers
             await _uow.Commit();
             return Ok(TokenService.GeraToken(usuario));
         }
-        
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UsuarioUpdateDto usuarioDto)
+
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> VincularPessoa(int id, [FromBody] UsuarioVinculoDto usuarioDto)
         {
             var email = User.Claims.Where(x => x.Type == ClaimTypes.Email).Select(x => x.Value).ToList()[0];
             var isAdmin = User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToList().Exists(x => x == "Admin");
 
-            if (id != usuarioDto.Id)
+            if (id != usuarioDto.IdUsuario)
             {
                 throw new CustomException(HttpStatusCode.BadRequest, "Requisição inválida!");
             }
@@ -90,7 +90,14 @@ namespace Agenda.Api.Controllers
             {
                 throw new CustomException(HttpStatusCode.Unauthorized, "Não Autorizado!");
             }
-            
+
+            var pessoa = await _uow.PessoaRepository.GetById(usuarioDto.PessoaId);
+
+            if (pessoa == null)
+            {
+                throw new CustomException(HttpStatusCode.NotFound, "Pessoa não encontrada!");
+            }
+
             usuario.PessoaId = usuarioDto.PessoaId;
 
             _uow.UsuarioRepository.Update(usuario);

@@ -18,7 +18,7 @@ namespace Agenda.Domain.DTOs.Mappings
             CreateMap<PessoaTipo, PessoaTipoEntradaDto>().ReverseMap();
             CreateMap<Usuario, UsuarioEntradaDto>().ReverseMap();
             CreateMap<Usuario, UsuarioSaidaDto>().ReverseMap();
-            CreateMap<Usuario, UsuarioUpdateDto>().ReverseMap();
+            CreateMap<Usuario, UsuarioVinculoDto>().ReverseMap();
             CreateMap<RecadoTipo, RecadoTipoEntradaDto>().ReverseMap();
             CreateMap<RecadoStatus, RecadoStatusEntradaDto>().ReverseMap();
             CreateMap<Recado, RecadoEntradaDto>().ReverseMap();

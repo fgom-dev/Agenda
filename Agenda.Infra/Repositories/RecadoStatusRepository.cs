@@ -2,7 +2,9 @@
 using Agenda.Domain.Models;
 using Agenda.Domain.Repositories;
 using Agenda.Infra.Context;
+using Agenda.Shared.Errors;
 using AutoMapper;
+using System.Net;
 
 namespace Agenda.Infra.Repositories
 {
@@ -14,9 +16,17 @@ namespace Agenda.Infra.Repositories
 
         public RecadoStatus Add(RecadoStatusEntradaDto recadoStatusEntrada)
         {
-            var recadoStatus = _mapper.Map<RecadoStatus>(recadoStatusEntrada);
-            _context.RecadoStatus.Add(recadoStatus);
-            return recadoStatus;
+            try
+            {
+                var recadoStatus = _mapper.Map<RecadoStatus>(recadoStatusEntrada);
+                _context.RecadoStatus.Add(recadoStatus);
+                return recadoStatus;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
+            }
+            
         }
     }
 }

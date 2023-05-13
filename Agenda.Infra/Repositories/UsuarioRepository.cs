@@ -25,9 +25,9 @@ namespace Agenda.Infra.Repositories
                 var usuariosSaidaDtoPaged = PagedList<UsuarioSaidaDto>.ToPagedList(usuariosSaidaDto, parameters.PageNumber, parameters.PageSize);
                 return usuariosSaidaDtoPaged;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -41,10 +41,10 @@ namespace Agenda.Infra.Repositories
             {
                 throw new CustomException(HttpStatusCode.NotFound, "Usuario não encontrado");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
-        }               
+        }
     }
 }

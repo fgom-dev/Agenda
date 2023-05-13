@@ -27,9 +27,9 @@ namespace Agenda.Infra.Repositories
                 entity.UpdatedAt = DateTime.UtcNow;
                 _context.Set<T>().Add(entity);
             }
-            catch
+            catch (Exception ex) 
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -39,9 +39,9 @@ namespace Agenda.Infra.Repositories
             {
                 _context.Set<T>().Remove(entity);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -52,9 +52,9 @@ namespace Agenda.Infra.Repositories
                 return PagedList<T>.ToPagedList(await _context.Set<T>()
                     .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -68,9 +68,9 @@ namespace Agenda.Infra.Repositories
             {
                 throw new CustomException(HttpStatusCode.NotFound, $"{_context.Set<T>().EntityType.DisplayName()} não encontrado(a)");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -81,9 +81,9 @@ namespace Agenda.Infra.Repositories
                 entity.UpdatedAt = DateTime.UtcNow;
                 _context.Set<T>().Update(entity);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
     }

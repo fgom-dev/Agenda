@@ -17,9 +17,17 @@ namespace Agenda.Infra.Repositories
 
         public Pessoa Add(PessoaEntradaDto pessoaEntrada)
         {
-            var pessoa = _mapper.Map<Pessoa>(pessoaEntrada);
-            _context.Pessoas.Add(pessoa);
-            return pessoa;
+            try
+            {
+                var pessoa = _mapper.Map<Pessoa>(pessoaEntrada);
+                _context.Pessoas.Add(pessoa);
+                return pessoa;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
+            }
+
         }
 
         public async Task<Pessoa> GetByDocumento(string documento)
@@ -32,9 +40,9 @@ namespace Agenda.Infra.Repositories
             {
                 throw new CustomException(HttpStatusCode.NotFound, "Pessoa não encontrada");
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, "Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
     }

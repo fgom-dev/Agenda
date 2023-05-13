@@ -22,9 +22,9 @@ namespace Agenda.Infra.Repositories
                 return PagedList<PessoaRecado>.ToPagedList(await _context.PessoasRecados
                     .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
-            catch
+            catch (Exception ex) 
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -36,9 +36,9 @@ namespace Agenda.Infra.Repositories
                     .Where(x => x.PessoaId == pessoaId && x.RecadoStatusId == 1)                    
                     .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
-            catch
+            catch (Exception ex) 
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
     }

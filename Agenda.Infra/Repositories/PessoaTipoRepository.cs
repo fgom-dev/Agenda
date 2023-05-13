@@ -24,9 +24,9 @@ namespace Agenda.Infra.Repositories
                 _context.PessoaTipos.Add(pessoaTipo);
                 return pessoaTipo;
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
     }

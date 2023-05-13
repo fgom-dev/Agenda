@@ -18,12 +18,20 @@ namespace Agenda.Infra.Repositories
 
         public Recado Add(RecadoEntradaDto recadoEntrada, int usuarioId)
         {
-            var recado = _mapper.Map<Recado>(recadoEntrada);
-            recado.UsuarioId = usuarioId;
-            recado.CreatedAt = DateTime.UtcNow;
-            recado.UpdatedAt = DateTime.UtcNow;
-            _context.Recados.Add(recado);
-            return recado;
+            try
+            {
+                var recado = _mapper.Map<Recado>(recadoEntrada);
+                recado.UsuarioId = usuarioId;
+                recado.CreatedAt = DateTime.UtcNow;
+                recado.UpdatedAt = DateTime.UtcNow;
+                _context.Recados.Add(recado);
+                return recado;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
+            }
+            
         }
 
         public async Task<PagedList<Recado>> Get(PaginationParameters parameters, int usuarioId)
@@ -34,9 +42,9 @@ namespace Agenda.Infra.Repositories
                     .Where(x => x.UsuarioId == usuarioId)
                     .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
 
@@ -47,9 +55,9 @@ namespace Agenda.Infra.Repositories
                 recado.UpdatedAt = DateTime.UtcNow;
                 _context.Recados.Update(recado);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto!");
+                throw new CustomException(HttpStatusCode.InternalServerError, $"Erro não previsto! ({ex.Message})");
             }
         }
     }
