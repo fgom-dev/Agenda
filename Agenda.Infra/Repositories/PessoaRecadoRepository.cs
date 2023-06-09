@@ -33,7 +33,7 @@ namespace Agenda.Infra.Repositories
             try
             {
                 return PagedList<PessoaRecado>.ToPagedList(await _context.PessoasRecados
-                    .Where(x => x.PessoaId == pessoaId && x.RecadoStatusId == 1)                    
+                    .Where(x => x.PessoaId == pessoaId)                    
                     .ToListAsync(), parameters.PageNumber, parameters.PageSize);
             }
             catch (Exception ex) 
